@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Random = UnityEngine.Random;
@@ -9,26 +10,29 @@ namespace Core
     public class GameManager : Singleton<GameManager>
     {
         [Header("Scene Management")] 
-        [SerializeField] private List<int> availableGames = new List<int>();
-        [SerializeField] private List<int> playedGames = new List<int>();
-        
-        private int GetRandomLevel()
-        {
-            var index = Random.Range(0, availableGames.Count);
-            var game = availableGames[index];
-            if (playedGames.Contains(game)) return -1;
-            playedGames.Add(game);
-            availableGames.Remove(game);
-            Debug.Log($"Game Index: {game}");
+        private readonly List<int> _availableGames = new List<int>();
+
+        private void Start() {
+            RepopulateLevels();
+        }
+
+        private void RepopulateLevels() {
+            for (var i = 0; i < EditorBuildSettings.scenes.Length; i++) {
+                if (i <= 0) continue;
+                _availableGames.Add(i);
+            }
+        }
+
+        private int GetRandomLevel() {
+            var index = Random.Range(0, _availableGames.Count);
+            var game = _availableGames[index];
+            _availableGames.Remove(game);
             return game;
         }
 
-        public void LoadRandomLevel()
-        {
-            if (availableGames.Count <= 0) {
-                Debug.Log("No more games!");
-                return;
-            }
+        public void LoadRandomLevel() {
+            if (_availableGames.Count <= 0)
+                RepopulateLevels();
             var index = GetRandomLevel();
             SceneManager.LoadSceneAsync(index);
         }
