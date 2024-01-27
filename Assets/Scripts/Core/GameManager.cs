@@ -45,7 +45,7 @@ namespace Core
             if (_availableGames.Count <= 0)
                 RepopulateLevels();
             var index = GetRandomLevel();
-            SceneManager.LoadSceneAsync(index);
+            SceneManager.LoadScene(index);
         }
 
         public void EndOfGame() //Termina el juego y carga el siguiente nivel.
@@ -66,7 +66,7 @@ namespace Core
             } else { //Si pierde las vidas reinicia el juego;
                 StopAllCoroutines();
                 Debug.Log("HAHA YOU LOST!");
-                SceneManager.LoadSceneAsync(0);
+                SceneManager.LoadScene(0);
                 _gameCoroutine = null;
                 timeModifier = 0;
                 startGame = false;
