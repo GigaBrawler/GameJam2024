@@ -16,8 +16,8 @@ namespace MiniGame1
             if (Input.GetKeyDown(KeyCode.Space)) //Si le doy al espacio, suma aire.
                 air += 10;
             if (air <= 0) return; //Si el aire es menor o igual a cero, no hagas nada.
-            air -= Time.deltaTime * (air / 7.5f); //Si el aire es mayor a cero, ves restándolo con el tiempo.
-            if (!(air >= 500)) return;
+            air -= Time.deltaTime * (air / 7.9f); //Si el aire es mayor a cero, ves restándolo con el tiempo.
+            if (!(air >= 400)) return;
             //Si el aire es mayor a 500, has ganado!
             balloon.SetActive(false);
             EndGame();
