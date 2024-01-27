@@ -15,7 +15,7 @@ namespace Core
         private readonly List<int> _availableGames = new List<int>();
         private int _lastLevel;
         private Coroutine _gameCoroutine;
-        private float _timeModifier;
+        public float timeModifier;
 
         [Header("Mini Game Management")] 
         public int lives;
@@ -75,8 +75,8 @@ namespace Core
             LoadRandomLevel();
             while (currentMiniGame == null)
                 yield return null;
-            yield return new WaitForSeconds(_timeModifier < 10f ? 10f - _timeModifier : 0f);
-            _timeModifier += 0.1f;
+            yield return new WaitForSeconds(timeModifier < 10f ? 10f - timeModifier : 0f);
+            timeModifier += 0.1f;
             currentMiniGame.EndGame();
             StartCoroutine(nameof(LoadNextLevelCoroutine));
         }
