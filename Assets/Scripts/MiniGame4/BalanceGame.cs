@@ -51,7 +51,6 @@ namespace MiniGame4
             if (gameHasEnded) return;
             clownObject.GetComponent<SpriteRenderer>().sprite = clown;
             if (guy.transform.eulerAngles.z is > 210 or < 150) GameManager.Instance.lives -= 1;
-            else guy.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
             Debug.Log(guy.transform.eulerAngles.z is < 210 and > 150 ? "You Won!" : "What a loser...");
             base.EndGame();
         }
