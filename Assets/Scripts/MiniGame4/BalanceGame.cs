@@ -50,9 +50,9 @@ namespace MiniGame4
             //Aquí se añaden las condiciones de victoria, muy importante poner esto de aquí abajo: (if (GameHasEnded) return;)
             if (gameHasEnded) return;
             clownObject.GetComponent<SpriteRenderer>().sprite = clown;
-            if (guy.transform.eulerAngles.z is > 210 or < 150) GameManager.Instance.lives -= 1;
+            if (guy.transform.eulerAngles.z is > 225 or < 135) GameManager.Instance.lives -= 1;
             else guy.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
-            Debug.Log(guy.transform.eulerAngles.z is < 210 and > 150 ? "You Won!" : "What a loser...");
+            Debug.Log(guy.transform.eulerAngles.z is < 225 and > 135 ? "You Won!" : "What a loser...");
             base.EndGame();
         }
     }
