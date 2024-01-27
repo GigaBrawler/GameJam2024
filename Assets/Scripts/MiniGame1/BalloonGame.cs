@@ -17,7 +17,7 @@ namespace MiniGame1
                 air += 10;
             if (air <= 0) return; //Si el aire es menor o igual a cero, no hagas nada.
             air -= Time.deltaTime * (air / 7.9f); //Si el aire es mayor a cero, ves restándolo con el tiempo.
-            if (!(air >= 400)) return;
+            if (!(air >= 375)) return;
             //Si el aire es mayor a 500, has ganado!
             balloon.SetActive(false);
             EndGame();
@@ -26,8 +26,8 @@ namespace MiniGame1
         public override void EndGame() { //Este void, al ser override, toma la función base de MiniGameCore y la modifica.
             //Aquí se añaden las condiciones de victoria, muy importante poner esto de aquí abajo: (if (GameHasEnded) return;)
             if (gameHasEnded) return;
-            if (air < 400) GameManager.Instance.lives -= 1; //Aquí se restan vidas si pierdes.
-            Debug.Log(air >= 400 ? "You Won!" : "What a loser...");
+            if (air < 375) GameManager.Instance.lives -= 1; //Aquí se restan vidas si pierdes.
+            Debug.Log(air >= 375 ? "You Won!" : "What a loser...");
             base.EndGame();
         }
     }
