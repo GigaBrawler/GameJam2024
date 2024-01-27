@@ -67,6 +67,7 @@ namespace Core
                 StopAllCoroutines();
                 Debug.Log("HAHA YOU LOST!");
                 SceneManager.LoadSceneAsync(0);
+                _gameCoroutine = null;
                 timeModifier = 0;
                 startGame = false;
             }
