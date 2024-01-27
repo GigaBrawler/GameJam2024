@@ -26,8 +26,8 @@ namespace MiniGame1
         public override void EndGame() { //Este void, al ser override, toma la función base de MiniGameCore y la modifica.
             //Aquí se añaden las condiciones de victoria, muy importante poner esto de aquí abajo: (if (GameHasEnded) return;)
             if (GameHasEnded) return;
-            if (air < 500) GameManager.Instance.lives -= 1; //Aquí se restan vidas si pierdes.
-            Debug.Log(air >= 500 ? "You Won!" : "What a loser...");
+            if (air < 400) GameManager.Instance.lives -= 1; //Aquí se restan vidas si pierdes.
+            Debug.Log(air >= 400 ? "You Won!" : "What a loser...");
             base.EndGame();
         }
     }
