@@ -17,7 +17,7 @@ namespace MiniGame5
         public int spanks;
 
         void Start() {
-            var randomNumber = Random.Range(-1, 0);
+            var randomNumber = Random.Range(-1, 1);
             if (randomNumber == 0) randomNumber = 1;
             _direction = randomNumber;
             speed += GameManager.Instance.timeModifier * 5;
