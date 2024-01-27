@@ -11,7 +11,7 @@ namespace MiniGame1
         
         void Update() {
             if (gameHasEnded) return;
-            var size = 1 + (air / 100);
+            var size = 1 + (air / 80);
             balloon.transform.localScale = new Vector3(size, size, size);
             if (Input.GetKeyDown(KeyCode.Space)) //Si le doy al espacio, suma aire.
                 air += 10;
