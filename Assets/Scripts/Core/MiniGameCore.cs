@@ -12,6 +12,7 @@ namespace Core
         }
 
         public virtual void EndGame() { //Esta función gestiona todos los finales de juego.
+            GameManager.Instance.timeModifier += 0.1f;
             GameManager.Instance.EndOfGame();
             GameHasEnded = true;
         }

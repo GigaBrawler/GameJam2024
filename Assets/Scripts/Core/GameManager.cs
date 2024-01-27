@@ -67,6 +67,7 @@ namespace Core
                 StopAllCoroutines();
                 Debug.Log("HAHA YOU LOST!");
                 SceneManager.LoadSceneAsync(0);
+                timeModifier = 0;
                 startGame = false;
             }
         }
@@ -76,7 +77,6 @@ namespace Core
             while (currentMiniGame == null)
                 yield return null;
             yield return new WaitForSeconds(timeModifier < 10f ? 10f - timeModifier : 0f);
-            timeModifier += 0.1f;
             currentMiniGame.EndGame();
             StartCoroutine(nameof(LoadNextLevelCoroutine));
         }
