@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e73dcf41fb6d64dcda81d1a38c345e1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameHasEnded: 0
   guy: {fileID: 881027542}
 --- !u!1 &881027539
 GameObject:
@@ -267,6 +268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9db7d5a591c2b42b8b94962cc961995f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  game: {fileID: 205282328}
   rb: {fileID: 881027543}
   speed: 3
   spanks: 0

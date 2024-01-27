@@ -5,7 +5,7 @@ namespace Core
 {
     public class MiniGameCore : MonoBehaviour
     {
-        protected bool GameHasEnded; //Esta variable se encarga de saber si el juego ha terminado.
+        public bool gameHasEnded; //Esta variable se encarga de saber si el juego ha terminado.
         
         private void Start() { //Aquí se asigna este minijuego como minijuego actual en el manager.
             GameManager.Instance.currentMiniGame = this;
@@ -14,7 +14,7 @@ namespace Core
         public virtual void EndGame() { //Esta función gestiona todos los finales de juego.
             GameManager.Instance.timeModifier += 0.1f;
             GameManager.Instance.EndOfGame();
-            GameHasEnded = true;
+            gameHasEnded = true;
         }
     }
 }

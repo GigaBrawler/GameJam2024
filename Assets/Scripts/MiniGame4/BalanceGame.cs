@@ -25,7 +25,7 @@ namespace MiniGame4
         
         void Update() {
             var direction = -Input.GetAxisRaw("Horizontal");
-            if (GameHasEnded) return;
+            if (gameHasEnded) return;
             switch (direction) {
                 case 1:
                     clownObject.GetComponent<SpriteRenderer>().flipX = false;
@@ -48,7 +48,7 @@ namespace MiniGame4
 
         public override void EndGame() { //Este void, al ser override, toma la función base de MiniGameCore y la modifica.
             //Aquí se añaden las condiciones de victoria, muy importante poner esto de aquí abajo: (if (GameHasEnded) return;)
-            if (GameHasEnded) return;
+            if (gameHasEnded) return;
             clownObject.GetComponent<SpriteRenderer>().sprite = clown;
             if (guy.transform.eulerAngles.z is > 210 or < 150) GameManager.Instance.lives -= 1;
             else guy.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
