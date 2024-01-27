@@ -12,11 +12,21 @@ namespace MiniGame2
         [Header("Pose Data")] 
         [SerializeField] private int pose;
         [SerializeField] private TextMeshProUGUI testPoseIndicator;
-        [SerializeField] private TextMeshProUGUI testYourPoseIndicator;
         private int _poseCheck;
         private Coroutine _poseChecker;
         private float _localTimeModifier;
         private bool _hasWon;
+
+        [Header("Graphics")]
+        [SerializeField] private SpriteRenderer strongman;
+        [SerializeField] private SpriteRenderer mime;
+        [SerializeField] private Sprite mime1;
+        [SerializeField] private Sprite mime2;
+        [SerializeField] private Sprite pose1;
+        [SerializeField] private Sprite pose2;
+        [SerializeField] private Sprite pose3;
+        [SerializeField] private Sprite pose4;
+        [SerializeField] private Sprite poseIdle;
         
         private void GetPose()
         {
@@ -38,17 +48,29 @@ namespace MiniGame2
         private void SetPoseIndicator(int nextPose, TextMeshProUGUI poseIndicator) =>
             poseIndicator.text = nextPose switch {
                 0 => "IDLE",
-                1 => "UP",
-                2 => "RIGHT",
-                3 => "LEFT",
-                4 => "DOWN",
+                1 => "\u2191",
+                2 => "\u2192",
+                3 => "\u2190",
+                4 => "\u2193",
                 _ => poseIndicator.text
             };
+
+        private void SetPoseSprite(int nextPose)
+        {
+            strongman.sprite = nextPose switch {
+                1 => pose1,
+                2 => pose2,
+                3 => pose3,
+                4 => pose4,
+                0 => poseIdle,
+                _ => strongman.sprite
+            };
+        }
 
         private void Update()
         {
             if (gameHasEnded) return;
-            SetPoseIndicator(pose, testYourPoseIndicator);
+            SetPoseSprite(pose);
             GetPose();
             _poseChecker ??= StartCoroutine(nameof(PoseCheckerCoroutine));
         }
@@ -62,10 +84,12 @@ namespace MiniGame2
             if (pose == _poseCheck) {
                 Debug.Log("Well done! Next!");
                 _localTimeModifier += 0.01f;
-                testPoseIndicator.text = "NEXT!";
+                mime.sprite = mime2;
+                testPoseIndicator.text = "";
                 yield return new WaitForSeconds(0.2f);
                 _hasWon = true;
                 _poseChecker = null;
+                mime.sprite = mime1;
             } else {
                 _hasWon = false;
                 Debug.Log("So bad... Disgusting...");

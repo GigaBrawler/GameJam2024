@@ -26,6 +26,8 @@ namespace MiniGame4
         void Update() {
             var direction = -Input.GetAxisRaw("Horizontal");
             if (gameHasEnded) return;
+            if (GameManager.Instance.timeLeft <= 0)
+                EndGame();
             switch (direction) {
                 case 1:
                     clownObject.GetComponent<SpriteRenderer>().flipX = false;
@@ -41,7 +43,7 @@ namespace MiniGame4
             }
             var impulse = (30 * Mathf.Deg2Rad * direction * forceMultiplier) * rb.inertia * Time.deltaTime;
             rb.AddTorque(impulse, ForceMode2D.Force);
-            if (guy.transform.eulerAngles.z is <= 225 and >= 135 || gameHasEnded) return;
+            if (guy.transform.eulerAngles.z is <= 225 and >= 135) return;
             guy.GetComponentInChildren<PolygonCollider2D>().enabled = false;
             EndGame();
         }
@@ -56,6 +58,7 @@ namespace MiniGame4
             guy.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
             Debug.Log(guy.transform.eulerAngles.z is < 225 and > 135 ? "You Won!" : "What a loser...");
             base.EndGame();
+            Destroy(this);
         }
     }
 }

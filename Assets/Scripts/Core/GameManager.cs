@@ -21,7 +21,6 @@ namespace Core
         public float timeModifier;
         public float timeLeft;
         public int gamesWon;
-        private int _gamesPlayed;
 
         [Header("Mini Game Management")] 
         public int lives;
@@ -30,6 +29,7 @@ namespace Core
 
         [Header("UI")] 
         [SerializeField] private Image timeBar;
+        [SerializeField] private Image livesImage;
         [SerializeField] private TextMeshProUGUI promptText;
 
         private void Start() { //Al principio, recoge todos los niveles posibles.
@@ -88,6 +88,7 @@ namespace Core
             if (!timeBar.gameObject.activeSelf) timeBar.gameObject.SetActive(true);
             promptText.gameObject.SetActive(_loadingLevel);
             timeBar.fillAmount = timeLeft / (10f - timeModifier);
+            livesImage.fillAmount = lives / 5f;
         }
 
         private void Update()
@@ -111,13 +112,7 @@ namespace Core
                 if (currentMiniGame != null)
                     currentMiniGame.EndGame();
                 _loadLevel = true;
-                if (_gamesPlayed <= 0) {
-                    timeLeft = timeModifier < 10f ? 10f - timeModifier : 0f;
-                    _loadLevel = false;
-                    _gamesPlayed++;
-                    LoadRandomLevel(GetRandomLevel());
-                } else
-                    StartCoroutine(nameof(LoadNextLevelCoroutine));
+                StartCoroutine(nameof(LoadNextLevelCoroutine));
             }
         }
 
@@ -129,7 +124,6 @@ namespace Core
             yield return new WaitForSeconds(3f);
             timeLeft = timeModifier < 10f ? 10f - timeModifier : 0f;
             _loadLevel = false;
-            _gamesPlayed++;
             _loadingLevel = false;
             LoadRandomLevel(nextLevel);
         }
