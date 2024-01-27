@@ -57,7 +57,7 @@ namespace MiniGame2
             _poseCheck = Random.Range(1, 5);
             SetPoseIndicator(_poseCheck, testPoseIndicator);
             Debug.Log($"Incoming pose: {_poseCheck}!");
-            yield return new WaitForSeconds(1.5f - GameManager.Instance.timeModifier - _localTimeModifier);
+            yield return new WaitForSeconds(1.5f - GameManager.Instance.timeModifier / 3.5f - _localTimeModifier);
             if (pose == _poseCheck) {
                 Debug.Log("Well done! Next!");
                 _localTimeModifier += 0.01f;
