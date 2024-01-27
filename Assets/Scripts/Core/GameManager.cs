@@ -19,7 +19,7 @@ namespace Core
 
         [Header("Mini Game Management")] 
         public int lives;
-        [SerializeField] private bool startGame;
+        public bool startGame;
         public MiniGameCore currentMiniGame;
 
         private void Start() { //Al principio, recoge todos los niveles posibles.
