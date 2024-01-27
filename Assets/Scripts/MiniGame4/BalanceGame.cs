@@ -1,4 +1,5 @@
 using Core;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace MiniGame4
@@ -10,6 +11,11 @@ namespace MiniGame4
         [SerializeField] private GameObject guy;
         [SerializeField] private float forceMultiplier;
 
+        [Header("Clown Management")] 
+        [SerializeField] private GameObject clownObject;
+        [SerializeField] private Sprite clown;
+        [SerializeField] private Sprite clownBlow;
+
         void Start()
         {
             var randomNumber = Random.Range(-1, 1);
@@ -18,8 +24,21 @@ namespace MiniGame4
         }
         
         void Update() {
-            if (GameHasEnded) return;
             var direction = -Input.GetAxisRaw("Horizontal");
+            if (GameHasEnded) return;
+            switch (direction) {
+                case 1:
+                    clownObject.GetComponent<SpriteRenderer>().flipX = false;
+                    clownObject.GetComponent<SpriteRenderer>().sprite = clownBlow;
+                    break;
+                case -1:
+                    clownObject.GetComponent<SpriteRenderer>().flipX = true;
+                    clownObject.GetComponent<SpriteRenderer>().sprite = clownBlow;
+                    break;
+                case 0:
+                    clownObject.GetComponent<SpriteRenderer>().sprite = clown;
+                    break;
+            }
             var impulse = (30 * Mathf.Deg2Rad * direction * forceMultiplier) * rb.inertia * Time.deltaTime;
             rb.AddTorque(impulse, ForceMode2D.Force);
             if (guy.transform.eulerAngles.z is <= 225 and >= 135) return;
@@ -30,7 +49,9 @@ namespace MiniGame4
         public override void EndGame() { //Este void, al ser override, toma la función base de MiniGameCore y la modifica.
             //Aquí se añaden las condiciones de victoria, muy importante poner esto de aquí abajo: (if (GameHasEnded) return;)
             if (GameHasEnded) return;
+            clownObject.GetComponent<SpriteRenderer>().sprite = clown;
             if (guy.transform.eulerAngles.z is > 210 or < 150) GameManager.Instance.lives -= 1;
+            else guy.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
             Debug.Log(guy.transform.eulerAngles.z is < 210 and > 150 ? "You Won!" : "What a loser...");
             base.EndGame();
         }
