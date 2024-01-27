@@ -33,6 +33,7 @@ namespace MiniGame3
             if (gameHasEnded) return;
             inputText.interactable = false;
             if (inputText.text != word) GameManager.Instance.lives -= 1;
+            else GameManager.Instance.gamesWon++;
             Debug.Log(inputText.text == word ? "You Won!" : "What a loser...");
             base.EndGame();
         }
