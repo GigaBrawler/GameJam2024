@@ -20,7 +20,7 @@ namespace MiniGame5
             var randomNumber = Random.Range(-1, 0);
             if (randomNumber == 0) randomNumber = 1;
             _direction = randomNumber;
-            speed += GameManager.Instance.timeModifier * 10;
+            speed += GameManager.Instance.timeModifier * 5;
             _speedMultiplier = 1;
         }
 

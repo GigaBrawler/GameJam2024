@@ -14,15 +14,15 @@ namespace MiniGame4
         {
             var randomNumber = Random.Range(-1, 1);
             if (randomNumber == 0) randomNumber = 1;
-            rb.AddTorque(30 * Mathf.Deg2Rad * randomNumber * 50, ForceMode2D.Force);
+            rb.AddTorque(30 * Mathf.Deg2Rad * randomNumber * 3000 * Time.deltaTime, ForceMode2D.Force);
         }
         
         void Update() {
             if (GameHasEnded) return;
             var direction = -Input.GetAxisRaw("Horizontal");
-            var impulse = (30 * Mathf.Deg2Rad * direction * forceMultiplier) * rb.inertia;
+            var impulse = (30 * Mathf.Deg2Rad * direction * forceMultiplier) * rb.inertia * Time.deltaTime;
             rb.AddTorque(impulse, ForceMode2D.Force);
-            if (guy.transform.eulerAngles.z is > 210 or < 150)
+            if (guy.transform.eulerAngles.z is > 225 or < 135)
                 EndGame();
         }
 

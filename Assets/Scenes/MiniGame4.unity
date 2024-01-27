@@ -302,7 +302,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 1161733203}
   guy: {fileID: 1161733202}
-  forceMultiplier: 4
+  forceMultiplier: 2600
 --- !u!1 &1161733202
 GameObject:
   m_ObjectHideFlags: 0
