@@ -47,7 +47,7 @@ namespace MiniGame2
 
         private void Update()
         {
-            if (GameHasEnded) return;
+            if (gameHasEnded) return;
             SetPoseIndicator(pose, testYourPoseIndicator);
             GetPose();
             _poseChecker ??= StartCoroutine(nameof(PoseCheckerCoroutine));
@@ -74,7 +74,7 @@ namespace MiniGame2
 
         public override void EndGame()
         {
-            if (GameHasEnded) return;
+            if (gameHasEnded) return;
             if (!_hasWon) GameManager.Instance.lives -= 1;
             Debug.Log(_hasWon ? "You Won!" : "What a loser...");
             base.EndGame();

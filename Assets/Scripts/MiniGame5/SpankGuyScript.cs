@@ -8,6 +8,9 @@ namespace MiniGame5
 {
     public class SpankGuyScript : MonoBehaviour, IPointerClickHandler
     {
+        [Header("Game Data")]
+        public SpankGame game;
+        
         [Header("Guy Data")] 
         [SerializeField] private Rigidbody2D rb;
         private int _direction;
@@ -36,6 +39,7 @@ namespace MiniGame5
         }
         
         public void OnPointerClick(PointerEventData eventData) {
+            if (game.gameHasEnded) return;
             Debug.Log("Ouch!");
             _speedMultiplier += 0.5f;
             spanks++;

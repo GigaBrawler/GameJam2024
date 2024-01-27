@@ -41,7 +41,7 @@ namespace MiniGame6
         }
         
         public override void EndGame() {
-            if (GameHasEnded) return;
+            if (gameHasEnded) return;
             if (!gotTheDuck) GameManager.Instance.lives -= 1;
             Debug.Log(gotTheDuck ? "You Won!" : "What a loser...");
             base.EndGame();

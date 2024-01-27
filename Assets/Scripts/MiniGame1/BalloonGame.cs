@@ -10,7 +10,7 @@ namespace MiniGame1
         [SerializeField] private GameObject balloon;
         
         void Update() {
-            if (GameHasEnded) return;
+            if (gameHasEnded) return;
             var size = 1 + (air / 100);
             balloon.transform.localScale = new Vector3(size, size, size);
             if (Input.GetKeyDown(KeyCode.Space)) //Si le doy al espacio, suma aire.
@@ -25,7 +25,7 @@ namespace MiniGame1
 
         public override void EndGame() { //Este void, al ser override, toma la función base de MiniGameCore y la modifica.
             //Aquí se añaden las condiciones de victoria, muy importante poner esto de aquí abajo: (if (GameHasEnded) return;)
-            if (GameHasEnded) return;
+            if (gameHasEnded) return;
             if (air < 400) GameManager.Instance.lives -= 1; //Aquí se restan vidas si pierdes.
             Debug.Log(air >= 400 ? "You Won!" : "What a loser...");
             base.EndGame();

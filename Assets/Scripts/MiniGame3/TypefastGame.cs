@@ -30,7 +30,7 @@ namespace MiniGame3
         }
 
         public override void EndGame() {
-            if (GameHasEnded) return;
+            if (gameHasEnded) return;
             inputText.interactable = false;
             if (inputText.text != word) GameManager.Instance.lives -= 1;
             Debug.Log(inputText.text == word ? "You Won!" : "What a loser...");

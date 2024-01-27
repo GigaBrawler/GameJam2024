@@ -18,15 +18,23 @@ namespace MiniGame7
             switch (number) {
                 case 0:
                     Box1.GetComponent<BoxScript>().hasCat = true;
+                    Box1.GetComponent<SpriteRenderer>().sprite = 
+                        Box1.GetComponent<BoxScript>().hasCat ? 
+                            Box1.GetComponent<BoxScript>().closedBoxCat : 
+                            Box1.GetComponent<BoxScript>().closedBoxNoCat;
                 break;
                 case -1:
                     Box2.GetComponent<BoxScript>().hasCat = true;
+                    Box2.GetComponent<SpriteRenderer>().sprite = 
+                        Box2.GetComponent<BoxScript>().hasCat ? 
+                            Box2.GetComponent<BoxScript>().closedBoxCat : 
+                            Box2.GetComponent<BoxScript>().closedBoxNoCat;
                 break;
             }
         }
 
         public override void EndGame() {
-            if (GameHasEnded) return;
+            if (gameHasEnded) return;
             if (!Win) GameManager.Instance.lives -= 1;
             Debug.Log(Win ? "You Won!" : "What a loser...");
             base.EndGame();
