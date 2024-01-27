@@ -19,6 +19,9 @@ namespace MiniGame5
         private float _speedMultiplier;
         public int spanks;
 
+        [Header("Mime Sprites")] 
+        [SerializeField] private Sprite mime2;
+
         void Start() {
             var randomNumber = Random.Range(-1, 1);
             if (randomNumber == 0) randomNumber = 1;
@@ -29,6 +32,7 @@ namespace MiniGame5
 
         void Update()
         {
+            gameObject.GetComponent<SpriteRenderer>().flipX = (_direction == 1);
             if (transform.position.x is > 7.5f or < -7.5f && !_switchDirection) {
                 _switchDirection = true;
                 _direction = -_direction;
@@ -43,6 +47,8 @@ namespace MiniGame5
             Debug.Log("Ouch!");
             _speedMultiplier += 0.5f;
             spanks++;
+            if (spanks > 5)
+                gameObject.GetComponent<SpriteRenderer>().sprite = mime2;
         }
     }
 }
