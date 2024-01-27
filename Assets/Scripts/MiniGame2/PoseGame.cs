@@ -77,6 +77,7 @@ namespace MiniGame2
         {
             if (gameHasEnded) return;
             if (!_hasWon) GameManager.Instance.lives -= 1;
+            else GameManager.Instance.gamesWon++;
             Debug.Log(_hasWon ? "You Won!" : "What a loser...");
             base.EndGame();
         }

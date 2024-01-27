@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Core
@@ -14,18 +15,25 @@ namespace Core
         [Header("Scene Management")] 
         private readonly List<int> _availableGames = new List<int>();
         private int _lastLevel;
-        private Coroutine _gameCoroutine;
+        private bool _loadLevel;
+        private bool _loadingLevel;
         public float timeModifier;
+        public float timeLeft;
+        public int gamesWon;
+        private int _gamesPlayed;
 
         [Header("Mini Game Management")] 
         public int lives;
         public bool startGame;
         public MiniGameCore currentMiniGame;
 
+        [Header("UI")] 
+        [SerializeField] private Image timeBar;
+
         private void Start() { //Al principio, recoge todos los niveles posibles.
             RepopulateLevels();
         }
-
+        
         private void RepopulateLevels() { //Encuentra los niveles cargados y añadelos a la lista.
             for (var i = 0; i < EditorBuildSettings.scenes.Length; i++) {
                 if (i <= 0 || (i == _lastLevel)) continue;
@@ -55,37 +63,56 @@ namespace Core
             StartCoroutine(nameof(LoadNextLevelCoroutine));
         }
 
+        private void HandleUI()
+        {
+            if (!startGame) {
+                if (timeBar.gameObject.activeSelf) timeBar.gameObject.SetActive(false);
+                return;
+            }
+            if (!timeBar.gameObject.activeSelf) timeBar.gameObject.SetActive(true);
+            timeBar.fillAmount = timeLeft / (10f - timeModifier);
+        }
+
         private void Update()
         {
+            HandleUI();
             if (!startGame) {
                 lives = 5;
                 return;
             }
-            if (lives > 0) {
-                _gameCoroutine ??= StartCoroutine(nameof(GameLoopCoroutine));
-            } else { //Si pierde las vidas reinicia el juego;
+            if (lives <= 0) { //Si pierde las vidas reinicia el juego;
                 StopAllCoroutines();
                 Debug.Log("HAHA YOU LOST!");
                 SceneManager.LoadScene(0);
-                _gameCoroutine = null;
                 timeModifier = 0;
                 startGame = false;
+                return;
             }
-        }
-
-        private IEnumerator GameLoopCoroutine() { //Carga un nivel, espera 10 segundos, termina el nivel, carga el siguiente.
-            LoadRandomLevel();
-            while (currentMiniGame == null)
-                yield return null;
-            yield return new WaitForSeconds(timeModifier < 10f ? 10f - timeModifier : 0f);
-            currentMiniGame.EndGame();
-            StartCoroutine(nameof(LoadNextLevelCoroutine));
+            if (timeLeft > 0) {
+                if (!_loadingLevel) timeLeft -= Time.deltaTime;
+            } else if (!_loadLevel) {
+                if (currentMiniGame != null)
+                    currentMiniGame.EndGame();
+                _loadLevel = true;
+                if (_gamesPlayed <= 0) {
+                    timeLeft = timeModifier < 10f ? 10f - timeModifier : 0f;
+                    _loadLevel = false;
+                    _gamesPlayed++;
+                    LoadRandomLevel();
+                } else
+                    StartCoroutine(nameof(LoadNextLevelCoroutine));
+            }
         }
 
         private IEnumerator LoadNextLevelCoroutine() //Espera cinco segundos y carga un nivel (Aquí debemos mostrar la pantalla de fin de juego)
         {
+            _loadingLevel = true;
             yield return new WaitForSeconds(5f);
-            _gameCoroutine = null;
+            timeLeft = timeModifier < 10f ? 10f - timeModifier : 0f;
+            _loadLevel = false;
+            _gamesPlayed++;
+            _loadingLevel = false;
+            LoadRandomLevel();
         }
     }
 }

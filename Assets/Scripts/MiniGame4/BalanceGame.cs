@@ -41,17 +41,19 @@ namespace MiniGame4
             }
             var impulse = (30 * Mathf.Deg2Rad * direction * forceMultiplier) * rb.inertia * Time.deltaTime;
             rb.AddTorque(impulse, ForceMode2D.Force);
-            if (guy.transform.eulerAngles.z is <= 225 and >= 135) return;
+            if (guy.transform.eulerAngles.z is <= 225 and >= 135 || gameHasEnded) return;
             guy.GetComponentInChildren<PolygonCollider2D>().enabled = false;
             EndGame();
         }
-
-        public override void EndGame() { //Este void, al ser override, toma la función base de MiniGameCore y la modifica.
-            //Aquí se añaden las condiciones de victoria, muy importante poner esto de aquí abajo: (if (GameHasEnded) return;)
+        
+        public override void EndGame()
+        {
             if (gameHasEnded) return;
+            gameHasEnded = true;
             clownObject.GetComponent<SpriteRenderer>().sprite = clown;
             if (guy.transform.eulerAngles.z is > 225 or < 135) GameManager.Instance.lives -= 1;
-            else guy.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+            else GameManager.Instance.gamesWon++;
+            guy.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
             Debug.Log(guy.transform.eulerAngles.z is < 225 and > 135 ? "You Won!" : "What a loser...");
             base.EndGame();
         }

@@ -36,6 +36,7 @@ namespace MiniGame7
         public override void EndGame() {
             if (gameHasEnded) return;
             if (!Win) GameManager.Instance.lives -= 1;
+            else GameManager.Instance.gamesWon++;
             Debug.Log(Win ? "You Won!" : "What a loser...");
             base.EndGame();
         }
