@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -29,6 +30,7 @@ namespace Core
 
         [Header("UI")] 
         [SerializeField] private Image timeBar;
+        [SerializeField] private TextMeshProUGUI promptText;
 
         private void Start() { //Al principio, recoge todos los niveles posibles.
             RepopulateLevels();
@@ -41,6 +43,20 @@ namespace Core
             }
         }
 
+        private string GetPromptText(int nextLevel)
+        {
+            return nextLevel switch {
+                1 => "QUICK! POP HIS HEAD!",
+                2 => "QUICK! POSE!",
+                3 => "QUICK! SPELL CORRECTLY!",
+                4 => "HELP THE ANT KEEP BALANCE!",
+                5 => "MAKE HIM BREAK HIS SILENCE VOTE!",
+                6 => "Alright dude you can chill a bit... CHOOSE THE CORRECT DUCKTATOR!",
+                7 => "QUICK! FIND THE HIDDEN DWARF!",
+                _ => ""
+            };
+        }
+
         private int GetRandomLevel() { //Pilla un nivel random de la lista de niveles.
             var index = Random.Range(0, _availableGames.Count);
             var game = _availableGames[index];
@@ -49,10 +65,9 @@ namespace Core
             return game;
         }
 
-        private void LoadRandomLevel() { //Carga un nivel random de la lista de niveles.
+        private void LoadRandomLevel(int index) { //Carga un nivel random de la lista de niveles.
             if (_availableGames.Count <= 0)
                 RepopulateLevels();
-            var index = GetRandomLevel();
             SceneManager.LoadScene(index);
         }
 
@@ -67,9 +82,11 @@ namespace Core
         {
             if (!startGame) {
                 if (timeBar.gameObject.activeSelf) timeBar.gameObject.SetActive(false);
+                if (promptText.gameObject.activeSelf) promptText.gameObject.SetActive(false);
                 return;
             }
             if (!timeBar.gameObject.activeSelf) timeBar.gameObject.SetActive(true);
+            promptText.gameObject.SetActive(_loadingLevel);
             timeBar.fillAmount = timeLeft / (10f - timeModifier);
         }
 
@@ -98,7 +115,7 @@ namespace Core
                     timeLeft = timeModifier < 10f ? 10f - timeModifier : 0f;
                     _loadLevel = false;
                     _gamesPlayed++;
-                    LoadRandomLevel();
+                    LoadRandomLevel(GetRandomLevel());
                 } else
                     StartCoroutine(nameof(LoadNextLevelCoroutine));
             }
@@ -107,12 +124,14 @@ namespace Core
         private IEnumerator LoadNextLevelCoroutine() //Espera cinco segundos y carga un nivel (Aquí debemos mostrar la pantalla de fin de juego)
         {
             _loadingLevel = true;
-            yield return new WaitForSeconds(5f);
+            var nextLevel = GetRandomLevel();
+            promptText.text = GetPromptText(nextLevel);
+            yield return new WaitForSeconds(3f);
             timeLeft = timeModifier < 10f ? 10f - timeModifier : 0f;
             _loadLevel = false;
             _gamesPlayed++;
             _loadingLevel = false;
-            LoadRandomLevel();
+            LoadRandomLevel(nextLevel);
         }
     }
 }
