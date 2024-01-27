@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Core;
 using TMPro;
@@ -13,6 +14,11 @@ namespace MiniGame3
         [SerializeField] private TextMeshProUGUI wordText;
         [SerializeField] private TMP_InputField inputText;
 
+        [Header("Woman Data")] 
+        [SerializeField] private SpriteRenderer woman;
+        [SerializeField] private Sprite mouthOpen;
+        [SerializeField] private Sprite mouthClosed;
+
         void Start() {
             word = wordList[Random.Range(0, wordList.Count)];
             wordText.text = word;
@@ -21,6 +27,8 @@ namespace MiniGame3
 
         public void CheckForWord() {
             if (inputText.text == null) return;
+            StopAllCoroutines();
+            StartCoroutine(nameof(Talk));
             for (var i = 0; i < inputText.text.Length; i++) {
                 if (inputText.text[i] != word[i])
                     EndGame();
@@ -36,6 +44,13 @@ namespace MiniGame3
             else GameManager.Instance.gamesWon++;
             Debug.Log(inputText.text == word ? "You Won!" : "What a loser...");
             base.EndGame();
+        }
+
+        public IEnumerator Talk()
+        {
+            woman.sprite = mouthOpen;
+            yield return new WaitForSeconds(0.05f);
+            woman.sprite = mouthClosed;
         }
     }
 }
