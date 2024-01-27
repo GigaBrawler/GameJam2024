@@ -22,8 +22,9 @@ namespace MiniGame4
             var direction = -Input.GetAxisRaw("Horizontal");
             var impulse = (30 * Mathf.Deg2Rad * direction * forceMultiplier) * rb.inertia * Time.deltaTime;
             rb.AddTorque(impulse, ForceMode2D.Force);
-            if (guy.transform.eulerAngles.z is > 225 or < 135)
-                EndGame();
+            if (guy.transform.eulerAngles.z is <= 225 and >= 135) return;
+            guy.GetComponentInChildren<PolygonCollider2D>().enabled = false;
+            EndGame();
         }
 
         public override void EndGame() { //Este void, al ser override, toma la función base de MiniGameCore y la modifica.
