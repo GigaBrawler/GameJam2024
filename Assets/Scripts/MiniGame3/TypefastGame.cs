@@ -22,6 +22,9 @@ namespace MiniGame3
         [SerializeField] private Sprite mouthOpen;
         [SerializeField] private Sprite mouthClosed;
 
+        [Header("Audio")]
+        [SerializeField] private AudioSource speak;
+
         void Awake() {
             word = wordList[Random.Range(0, wordList.Count)];
             wordText.text = word;
@@ -32,6 +35,7 @@ namespace MiniGame3
             if (inputText.text == null) return;
             StopAllCoroutines();
             StartCoroutine(nameof(Talk));
+            speak.Play();
             for (var i = 0; i < inputText.text.Length; i++) {
                 if (inputText.text[i] != word[i])
                     EndGame();

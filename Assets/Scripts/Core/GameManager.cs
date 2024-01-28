@@ -45,7 +45,7 @@ namespace Core
         }
         
         private void RepopulateLevels() { //Encuentra los niveles cargados y añadelos a la lista.
-            for (var i = 0; i < EditorBuildSettings.scenes.Length; i++) {
+            for (var i = 0; i < 8; i++) {
                 if (i <= 0 || (i == _lastLevel)) continue;
                 _availableGames.Add(i);
             }
@@ -91,6 +91,7 @@ namespace Core
             PlayerPrefs.SetInt("Games", gamesWon);
             PlayerPrefs.Save();
             StopAllCoroutines();
+            music.Stop();
             StartCoroutine(nameof(BackToMenuCoroutine));
         }
 
@@ -108,6 +109,7 @@ namespace Core
 
         private void Update()
         {
+            music.pitch = ((10f + timeModifier) / 10f);
             HandleUI();
             if (!startGame) {
                 lives = 5;
@@ -150,13 +152,13 @@ namespace Core
         private IEnumerator BackToMenuCoroutine() //Espera cinco segundos y carga un nivel (Aquí debemos mostrar la pantalla de fin de juego)
         {
             telon.SetTrigger("Close");
-            startGame = false;
             yield return new WaitForSeconds(3f);
             timeLeft = 0f;
             telon.SetTrigger("Open");
             Debug.Log("HAHA YOU LOST!");
             SceneManager.LoadSceneAsync(0);
             timeModifier = 0;
+            startGame = false;
         }
     }
 }

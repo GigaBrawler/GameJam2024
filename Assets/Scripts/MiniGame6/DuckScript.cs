@@ -13,6 +13,9 @@ namespace MiniGame6
         public int id;
         [SerializeField] private Rigidbody2D rb;
 
+        [Header("Audio")] 
+        [SerializeField] private AudioSource quack;
+
         void Start() {
             rb = GetComponent<Rigidbody2D>();
         }
@@ -27,6 +30,7 @@ namespace MiniGame6
         public void OnPointerClick(PointerEventData eventData) {
             if (game.gameHasEnded) 
                 return;
+            quack.Play();
             Debug.Log($"My ID is {id}");
             if (id != game.id) {
                 game.EndGame();
