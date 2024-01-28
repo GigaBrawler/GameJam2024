@@ -12,6 +12,10 @@ namespace MiniGame7
         [SerializeField] private GameObject[] boxes;
         public bool Win;
 
+        [Header("Audio")]
+        public AudioSource open;
+        [SerializeField] private AudioSource dwarf;
+
         void Awake() {
             var number = Random.Range(0, boxes.Length);
             boxes[number].GetComponent<BoxScript>().hasCat = true;
@@ -23,13 +27,12 @@ namespace MiniGame7
 
         public override void EndGame() {
             if (gameHasEnded) return;
-            if (!Win)
-            {
+            if (!Win) {
                 GameManager.Instance.boo.Play();
                 GameManager.Instance.lives -= 1;
-            }
-            else
+            } else
             {
+                dwarf.Play();
                 GameManager.Instance.yay.Play();
                 GameManager.Instance.gamesWon++;
             }

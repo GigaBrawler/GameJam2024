@@ -28,6 +28,12 @@ namespace MiniGame2
         [SerializeField] private Sprite pose4;
         [SerializeField] private Sprite poseIdle;
         
+        [Header("Sound")]
+        [SerializeField] private AudioSource pos1;
+        [SerializeField] private AudioSource pos2;
+        [SerializeField] private AudioSource pos3;
+        [SerializeField] private AudioSource pos4;
+        
         private void GetPose()
         {
             var vertical = Input.GetAxisRaw("Vertical");
@@ -57,14 +63,28 @@ namespace MiniGame2
 
         private void SetPoseSprite(int nextPose)
         {
-            strongman.sprite = nextPose switch {
-                1 => pose1,
-                2 => pose2,
-                3 => pose3,
-                4 => pose4,
-                0 => poseIdle,
-                _ => strongman.sprite
-            };
+            switch (nextPose)
+            {
+                case 1:
+                    pos1.Play();
+                    strongman.sprite = pose1;
+                    break;
+                case 2:
+                    pos2.Play();
+                    strongman.sprite = pose2;
+                    break;
+                case 3:
+                    pos3.Play();
+                    strongman.sprite = pose3;
+                    break;
+                case 4:
+                    pos4.Play();
+                    strongman.sprite = pose4;
+                    break;
+                case 0:
+                    strongman.sprite = poseIdle;
+                    break;
+            }
         }
 
         private void Update()
@@ -100,6 +120,7 @@ namespace MiniGame2
         public override void EndGame()
         {
             if (gameHasEnded) return;
+            StopAllCoroutines();
             if (!_hasWon)
             {
                 GameManager.Instance.boo.Play();

@@ -10,6 +10,7 @@ namespace Menu
         [Header("Games Data")] 
         [SerializeField] private TextMeshProUGUI highscore;
         [SerializeField] private TextMeshProUGUI score;
+        [SerializeField] private GameObject credits;
         
         public void StartGame()
         {
@@ -18,7 +19,7 @@ namespace Menu
 
         public void ShowCredits()
         {
-            
+            credits.SetActive(true);
         }
 
         private void Start()

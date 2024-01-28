@@ -22,6 +22,7 @@ namespace MiniGame7
 
         public void OnPointerClick(PointerEventData eventData) {
             if (game.gameHasEnded) return;
+            game.open.Play();
             Debug.Log(hasCat ? "Meow!" : "Fuck you!");
             if(hasCat) {
                 gameObject.GetComponent<SpriteRenderer>().sprite = openBoxCat;
