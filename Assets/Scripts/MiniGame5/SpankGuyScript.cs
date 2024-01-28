@@ -18,6 +18,8 @@ namespace MiniGame5
         private bool _switchDirection;
         private float _speedMultiplier;
         public int spanks;
+        [SerializeField] private AudioSource slap;
+        [SerializeField] private AudioSource scream;
 
         [Header("Mime Sprites")] 
         [SerializeField] private Sprite mime2;
@@ -45,10 +47,13 @@ namespace MiniGame5
         public void OnPointerClick(PointerEventData eventData) {
             if (game.gameHasEnded) return;
             Debug.Log("Ouch!");
+            slap.Play();
             _speedMultiplier += 0.5f;
             spanks++;
-            if (spanks > 5)
+            if (spanks > 5) {
+                scream.Play();
                 gameObject.GetComponent<SpriteRenderer>().sprite = mime2;
+            }
         }
     }
 }

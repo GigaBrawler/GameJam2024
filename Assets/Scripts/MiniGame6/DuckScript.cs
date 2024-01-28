@@ -25,7 +25,8 @@ namespace MiniGame6
         }
         
         public void OnPointerClick(PointerEventData eventData) {
-            if (game.gameHasEnded) return;
+            if (game.gameHasEnded) 
+                return;
             Debug.Log($"My ID is {id}");
             if (id != game.id) {
                 game.EndGame();
@@ -33,6 +34,7 @@ namespace MiniGame6
                 game.gotTheDuck = true;
                 game.EndGame();
             }
+            game.gameHasEnded = true;
         }
     }
 }

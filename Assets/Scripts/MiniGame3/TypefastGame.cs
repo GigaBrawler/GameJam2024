@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace MiniGame3
 {
@@ -13,13 +15,14 @@ namespace MiniGame3
         [SerializeField] private string word;
         [SerializeField] private TextMeshProUGUI wordText;
         [SerializeField] private TMP_InputField inputText;
+        private bool _started;
 
         [Header("Woman Data")] 
         [SerializeField] private SpriteRenderer woman;
         [SerializeField] private Sprite mouthOpen;
         [SerializeField] private Sprite mouthClosed;
 
-        void Start() {
+        void Awake() {
             word = wordList[Random.Range(0, wordList.Count)];
             wordText.text = word;
             inputText.ActivateInputField();
@@ -40,8 +43,16 @@ namespace MiniGame3
         public override void EndGame() {
             if (gameHasEnded) return;
             inputText.interactable = false;
-            if (inputText.text != word) GameManager.Instance.lives -= 1;
-            else GameManager.Instance.gamesWon++;
+            if (inputText.text != word)
+            {
+                GameManager.Instance.boo.Play();
+                GameManager.Instance.lives -= 1;
+            }
+            else
+            {
+                GameManager.Instance.yay.Play();
+                GameManager.Instance.gamesWon++;
+            }
             Debug.Log(inputText.text == word ? "You Won!" : "What a loser...");
             base.EndGame();
         }

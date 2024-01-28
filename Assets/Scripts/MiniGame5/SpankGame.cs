@@ -17,8 +17,16 @@ namespace MiniGame5
 
         public override void EndGame() {
             if (gameHasEnded) return;
-            if (guy.spanks <= 5) GameManager.Instance.lives -= 1;
-            else GameManager.Instance.gamesWon++;
+            if (guy.spanks <= 5)
+            {
+                GameManager.Instance.boo.Play();
+                GameManager.Instance.lives -= 1;
+            }
+            else
+            {
+                GameManager.Instance.yay.Play();
+                GameManager.Instance.gamesWon++;
+            }
             Debug.Log(guy.spanks > 5 ? "You Won!" : "What a loser...");
             base.EndGame();
         }

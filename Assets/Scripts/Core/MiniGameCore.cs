@@ -9,11 +9,15 @@ namespace Core
         
         private void Start() { //Aquí se asigna este minijuego como minijuego actual en el manager.
             GameManager.Instance.currentMiniGame = this;
+            GameManager.Instance.music.Play();
         }
 
         public virtual void EndGame() { //Esta función gestiona todos los finales de juego.
             GameManager.Instance.timeModifier += 0.1f;
-            GameManager.Instance.EndOfGame();
+            if (GameManager.Instance.lives > 0) 
+                GameManager.Instance.EndOfGame();
+            else 
+                GameManager.Instance.BackToMenu();
             gameHasEnded = true;
         }
     }

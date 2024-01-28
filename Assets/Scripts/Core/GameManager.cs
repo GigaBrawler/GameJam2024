@@ -17,10 +17,11 @@ namespace Core
         private readonly List<int> _availableGames = new List<int>();
         private int _lastLevel;
         private bool _loadLevel;
-        private bool _loadingLevel;
+        [SerializeField] private bool loadingLevel;
         public float timeModifier;
         public float timeLeft;
         public int gamesWon;
+        private int _nextLevel;
 
         [Header("Mini Game Management")] 
         public int lives;
@@ -31,6 +32,13 @@ namespace Core
         [SerializeField] private Image timeBar;
         [SerializeField] private Image livesImage;
         [SerializeField] private TextMeshProUGUI promptText;
+        [SerializeField] private TextMeshProUGUI timeText;
+        [SerializeField] private Animator telon;
+
+        [Header("Sound")] 
+        public AudioSource yay;
+        public AudioSource boo;
+        public AudioSource music;
 
         private void Start() { //Al principio, recoge todos los niveles posibles.
             RepopulateLevels();
@@ -68,7 +76,7 @@ namespace Core
         private void LoadRandomLevel(int index) { //Carga un nivel random de la lista de niveles.
             if (_availableGames.Count <= 0)
                 RepopulateLevels();
-            SceneManager.LoadScene(index);
+            SceneManager.LoadSceneAsync(index);
         }
 
         public void EndOfGame() //Termina el juego y carga el siguiente nivel.
@@ -78,17 +86,24 @@ namespace Core
             StartCoroutine(nameof(LoadNextLevelCoroutine));
         }
 
+        public void BackToMenu()
+        {
+            PlayerPrefs.SetInt("Games", gamesWon);
+            PlayerPrefs.Save();
+            StopAllCoroutines();
+            StartCoroutine(nameof(BackToMenuCoroutine));
+        }
+
         private void HandleUI()
         {
+            livesImage.fillAmount = lives / 5f;
             if (!startGame) {
                 if (timeBar.gameObject.activeSelf) timeBar.gameObject.SetActive(false);
-                if (promptText.gameObject.activeSelf) promptText.gameObject.SetActive(false);
                 return;
             }
             if (!timeBar.gameObject.activeSelf) timeBar.gameObject.SetActive(true);
-            promptText.gameObject.SetActive(_loadingLevel);
             timeBar.fillAmount = timeLeft / (10f - timeModifier);
-            livesImage.fillAmount = lives / 5f;
+            timeText.text = Mathf.RoundToInt(timeLeft).ToString();
         }
 
         private void Update()
@@ -98,16 +113,8 @@ namespace Core
                 lives = 5;
                 return;
             }
-            if (lives <= 0) { //Si pierde las vidas reinicia el juego;
-                StopAllCoroutines();
-                Debug.Log("HAHA YOU LOST!");
-                SceneManager.LoadScene(0);
-                timeModifier = 0;
-                startGame = false;
-                return;
-            }
             if (timeLeft > 0) {
-                if (!_loadingLevel) timeLeft -= Time.deltaTime;
+                if (!loadingLevel) timeLeft -= Time.deltaTime;
             } else if (!_loadLevel) {
                 if (currentMiniGame != null)
                     currentMiniGame.EndGame();
@@ -116,16 +123,40 @@ namespace Core
             }
         }
 
+        public void StartGame() {
+            StartCoroutine(nameof(LoadNextLevelCoroutine));
+        }
+
         private IEnumerator LoadNextLevelCoroutine() //Espera cinco segundos y carga un nivel (Aquí debemos mostrar la pantalla de fin de juego)
         {
-            _loadingLevel = true;
-            var nextLevel = GetRandomLevel();
-            promptText.text = GetPromptText(nextLevel);
+            telon.SetTrigger("Close");
+            _nextLevel = GetRandomLevel();
+            promptText.text = GetPromptText(_nextLevel);
+            loadingLevel = true;
+            promptText.gameObject.SetActive(true);
             yield return new WaitForSeconds(3f);
+            if (!startGame) {
+                gamesWon = 0;
+                startGame = true;
+            }
             timeLeft = timeModifier < 10f ? 10f - timeModifier : 0f;
             _loadLevel = false;
-            _loadingLevel = false;
-            LoadRandomLevel(nextLevel);
+            loadingLevel = false;
+            telon.SetTrigger("Open");
+            promptText.gameObject.SetActive(false);
+            LoadRandomLevel(_nextLevel);
+        }
+        
+        private IEnumerator BackToMenuCoroutine() //Espera cinco segundos y carga un nivel (Aquí debemos mostrar la pantalla de fin de juego)
+        {
+            telon.SetTrigger("Close");
+            startGame = false;
+            yield return new WaitForSeconds(3f);
+            timeLeft = 0f;
+            telon.SetTrigger("Open");
+            Debug.Log("HAHA YOU LOST!");
+            SceneManager.LoadSceneAsync(0);
+            timeModifier = 0;
         }
     }
 }

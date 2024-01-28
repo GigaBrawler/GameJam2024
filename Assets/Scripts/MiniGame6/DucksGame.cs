@@ -18,7 +18,7 @@ namespace MiniGame6
         public float duckSpeed;
         public bool gotTheDuck;
 
-        void Start() {
+        void Awake() {
             var duck = ducks[Random.Range(0, ducks.Count)];
             duckToGet = duck;
             duckSpeed += GameManager.Instance.timeModifier;
@@ -43,6 +43,14 @@ namespace MiniGame6
         public override void EndGame() {
             if (gameHasEnded) return;
             Debug.Log(gotTheDuck ? "You Won!" : "What a loser...");
+            if (gotTheDuck)
+            {
+                GameManager.Instance.yay.Play();
+            }
+            else
+            {
+                GameManager.Instance.boo.Play();
+            }
             base.EndGame();
         }
     }
