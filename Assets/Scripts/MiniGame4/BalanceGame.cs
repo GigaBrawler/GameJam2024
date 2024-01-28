@@ -16,11 +16,11 @@ namespace MiniGame4
         [SerializeField] private Sprite clown;
         [SerializeField] private Sprite clownBlow;
 
-        void Start()
+        void Awake()
         {
             var randomNumber = Random.Range(-1, 1);
             if (randomNumber == 0) randomNumber = 1;
-            rb.AddTorque(30 * Mathf.Deg2Rad * randomNumber * 3000 * Time.deltaTime, ForceMode2D.Force);
+            rb.AddTorque(30 * Mathf.Deg2Rad * randomNumber * (3000 + (GameManager.Instance.timeLeft * 10)) * Time.deltaTime, ForceMode2D.Force);
         }
         
         void Update() {
@@ -44,6 +44,7 @@ namespace MiniGame4
             var impulse = (30 * Mathf.Deg2Rad * direction * forceMultiplier) * rb.inertia * Time.deltaTime;
             rb.AddTorque(impulse, ForceMode2D.Force);
             if (guy.transform.eulerAngles.z is <= 225 and >= 135) return;
+            if (GameManager.Instance.timeLeft <= 0) return;
             guy.GetComponentInChildren<PolygonCollider2D>().enabled = false;
             EndGame();
         }
@@ -53,8 +54,16 @@ namespace MiniGame4
             if (gameHasEnded) return;
             gameHasEnded = true;
             clownObject.GetComponent<SpriteRenderer>().sprite = clown;
-            if (guy.transform.eulerAngles.z is > 225 or < 135) GameManager.Instance.lives -= 1;
-            else GameManager.Instance.gamesWon++;
+            if (guy.transform.eulerAngles.z is > 225 or < 135)
+            {
+                GameManager.Instance.boo.Play();
+                GameManager.Instance.lives -= 1;
+            }
+            else {
+                GameManager.Instance.yay.Play();
+                GameManager.Instance.gamesWon++;
+            }
+
             guy.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
             Debug.Log(guy.transform.eulerAngles.z is < 225 and > 135 ? "You Won!" : "What a loser...");
             base.EndGame();

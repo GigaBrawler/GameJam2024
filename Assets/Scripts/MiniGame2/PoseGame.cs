@@ -100,8 +100,16 @@ namespace MiniGame2
         public override void EndGame()
         {
             if (gameHasEnded) return;
-            if (!_hasWon) GameManager.Instance.lives -= 1;
-            else GameManager.Instance.gamesWon++;
+            if (!_hasWon)
+            {
+                GameManager.Instance.boo.Play();
+                GameManager.Instance.lives -= 1;
+            }
+            else
+            {
+                GameManager.Instance.yay.Play();
+                GameManager.Instance.gamesWon++;
+            }
             Debug.Log(_hasWon ? "You Won!" : "What a loser...");
             base.EndGame();
         }

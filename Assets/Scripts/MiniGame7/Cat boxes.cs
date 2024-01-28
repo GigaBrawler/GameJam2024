@@ -9,34 +9,30 @@ namespace MiniGame7
     {
         [Header("CatBox Data")]
         [SerializeField] private float air; //Esta variable es el aire.
-        [SerializeField] private GameObject Box1;
-        [SerializeField] private GameObject Box2;
+        [SerializeField] private GameObject[] boxes;
         public bool Win;
 
-        void Start() {
-            var number = Random.Range(-1, 1);
-            switch (number) {
-                case 0:
-                    Box1.GetComponent<BoxScript>().hasCat = true;
-                    Box1.GetComponent<SpriteRenderer>().sprite = 
-                        Box1.GetComponent<BoxScript>().hasCat ? 
-                            Box1.GetComponent<BoxScript>().closedBoxCat : 
-                            Box1.GetComponent<BoxScript>().closedBoxNoCat;
-                break;
-                case -1:
-                    Box2.GetComponent<BoxScript>().hasCat = true;
-                    Box2.GetComponent<SpriteRenderer>().sprite = 
-                        Box2.GetComponent<BoxScript>().hasCat ? 
-                            Box2.GetComponent<BoxScript>().closedBoxCat : 
-                            Box2.GetComponent<BoxScript>().closedBoxNoCat;
-                break;
-            }
+        void Awake() {
+            var number = Random.Range(0, boxes.Length);
+            boxes[number].GetComponent<BoxScript>().hasCat = true;
+            boxes[number].GetComponent<SpriteRenderer>().sprite = 
+                boxes[number].GetComponent<BoxScript>().hasCat ? 
+                    boxes[number].GetComponent<BoxScript>().closedBoxCat : 
+                    boxes[number].GetComponent<BoxScript>().closedBoxNoCat;
         }
 
         public override void EndGame() {
             if (gameHasEnded) return;
-            if (!Win) GameManager.Instance.lives -= 1;
-            else GameManager.Instance.gamesWon++;
+            if (!Win)
+            {
+                GameManager.Instance.boo.Play();
+                GameManager.Instance.lives -= 1;
+            }
+            else
+            {
+                GameManager.Instance.yay.Play();
+                GameManager.Instance.gamesWon++;
+            }
             Debug.Log(Win ? "You Won!" : "What a loser...");
             base.EndGame();
         }
