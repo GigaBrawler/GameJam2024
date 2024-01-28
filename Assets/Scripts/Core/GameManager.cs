@@ -152,13 +152,13 @@ namespace Core
         private IEnumerator BackToMenuCoroutine() //Espera cinco segundos y carga un nivel (Aquí debemos mostrar la pantalla de fin de juego)
         {
             telon.SetTrigger("Close");
+            startGame = false;
             yield return new WaitForSeconds(3f);
             timeLeft = 0f;
             telon.SetTrigger("Open");
             Debug.Log("HAHA YOU LOST!");
             SceneManager.LoadSceneAsync(0);
             timeModifier = 0;
-            startGame = false;
         }
     }
 }
