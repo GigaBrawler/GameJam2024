@@ -22,6 +22,7 @@ namespace Core
         public float timeLeft;
         public int gamesWon;
         private int _nextLevel;
+        public bool canLoadGame;
 
         [Header("Mini Game Management")] 
         public int lives;
@@ -125,12 +126,15 @@ namespace Core
             }
         }
 
-        public void StartGame() {
+        public void StartGame()
+        {
+            canLoadGame = true;
             StartCoroutine(nameof(LoadNextLevelCoroutine));
         }
 
         private IEnumerator LoadNextLevelCoroutine() //Espera cinco segundos y carga un nivel (Aquí debemos mostrar la pantalla de fin de juego)
         {
+            if (!canLoadGame) yield break;
             telon.SetTrigger("Close");
             _nextLevel = GetRandomLevel();
             promptText.text = GetPromptText(_nextLevel);
@@ -151,9 +155,10 @@ namespace Core
         
         private IEnumerator BackToMenuCoroutine() //Espera cinco segundos y carga un nivel (Aquí debemos mostrar la pantalla de fin de juego)
         {
+            canLoadGame = false;
             telon.SetTrigger("Close");
-            startGame = false;
             yield return new WaitForSeconds(3f);
+            startGame = false;
             timeLeft = 0f;
             telon.SetTrigger("Open");
             Debug.Log("HAHA YOU LOST!");
