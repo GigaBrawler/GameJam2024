@@ -24,6 +24,7 @@ namespace Menu
 
         private void Start()
         {
+            GameManager.Instance.canLoadGame = true;
             highscore.text = "Highest Score:\n" + PlayerPrefs.GetInt("Games").ToString();
             score.text = "Last Score:\n" + GameManager.Instance.gamesWon.ToString();
         }
